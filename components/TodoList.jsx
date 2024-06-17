@@ -59,6 +59,35 @@ const TodoList = () => {
     }
   };
 
+  const handleCompleted = async (id, currentStatus) => {
+    setLoading(true);
+    try {
+      const response = await fetch(`/api/todos/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          isCompleted: !currentStatus,
+        }),
+      });
+
+      if (response.ok) {
+        setTodos(
+          todos.map((todo) =>
+            todo.id === id ? { ...todo, isCompleted: !currentStatus } : todo
+          )
+        );
+      } else {
+        throw new Error('Failed to update todo');
+      }
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="container mx-auto p-4">
       <h2 className="text-3xl font-bold mt-6 mb-4 text-center">Todos</h2>
@@ -70,12 +99,15 @@ const TodoList = () => {
             className="bg-green-800 text-white p-4 rounded shadow-lg"
           >
             <h3 className="text-xl font-semibold">{todo.title}</h3>
-            <p className="text-gray-400">{todo.description}</p>
-            <p className="text-sm text-gray-500">
+            <p className="text-gray-200">{todo.description}</p>
+            <p className="text-sm text-gray-200">
               {new Date(todo.createdAt).toLocaleDateString()}
             </p>
             <div className="flex justify-between space-x-2 mt-4">
-              <div className="completion">
+              <div
+                className="completion"
+                onClick={() => handleCompleted(todo.id, todo.isCompleted)}
+              >
                 {todo.isCompleted ? (
                   <span className="bg-green-500 text-white px-2 py-1 rounded cursor-pointer">
                     Completed

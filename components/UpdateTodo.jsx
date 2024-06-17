@@ -21,6 +21,7 @@ const UpdateTodo = () => {
   const [date, setDate] = useState('');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -41,6 +42,7 @@ const UpdateTodo = () => {
   }, [id]);
 
   const handleSubmit = async (e) => {
+    setIsUpdating(true);
     e.preventDefault();
     setError(null);
 
@@ -57,6 +59,7 @@ const UpdateTodo = () => {
     });
 
     if (response.ok) {
+      setIsUpdating(false);
       router.push('/');
     } else {
       const error = await response
@@ -110,7 +113,7 @@ const UpdateTodo = () => {
             type="submit"
             className="w-full p-2 bg-blue-500 rounded text-white font-semibold hover:bg-blue-600"
           >
-            Update
+            {isUpdating ? 'Updating...' : 'Update'}
           </button>
           {error && <p className="mt-4 text-red-500">{error}</p>}
         </form>
