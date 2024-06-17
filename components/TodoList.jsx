@@ -63,7 +63,7 @@ const TodoList = () => {
     setLoading(true);
     try {
       const response = await fetch(`/api/todos/${id}`, {
-        method: 'PUT',
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },

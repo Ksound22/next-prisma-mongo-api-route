@@ -26,7 +26,7 @@ export async function GET(req, { params }) {
 
 export async function PUT(req, { params }) {
   const { id } = params;
-  const { title, description, date, isCompleted } = await req.json();
+  const { title, description, date } = await req.json();
 
   if (!id) {
     return NextResponse.json({ error: 'ID is required' }, { status: 400 });
@@ -39,6 +39,29 @@ export async function PUT(req, { params }) {
         title,
         description,
         createdAt: date ? new Date(date) : undefined,
+      },
+    });
+    return NextResponse.json(updatedTodo, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Failed to update todo' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PATCH(req, { params }) {
+  const { id } = params;
+  const { isCompleted } = await req.json();
+
+  if (!id) {
+    return NextResponse.json({ error: 'ID is required' }, { status: 400 });
+  }
+
+  try {
+    const updatedTodo = await prisma.todo.update({
+      where: { id },
+      data: {
         isCompleted,
       },
     });
