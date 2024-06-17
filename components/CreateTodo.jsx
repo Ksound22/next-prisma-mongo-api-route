@@ -8,12 +8,14 @@ const CreateTodo = () => {
   const [description, setDescription] = useState('');
   const [date, setDate] = useState('');
   const [error, setError] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
 
   const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setSubmitting(true);
     setError(null);
 
     const response = await fetch('/api/todos', {
@@ -32,6 +34,7 @@ const CreateTodo = () => {
       setTitle('');
       setDescription('');
       setDate('');
+      setSubmitting(false);
       router.push('/');
     } else {
       const error = await response
@@ -80,7 +83,7 @@ const CreateTodo = () => {
           type="submit"
           className="w-full p-2 bg-blue-500 rounded text-white font-semibold hover:bg-blue-600"
         >
-          Submit
+          {submitting === true ? 'Creating...' : 'Create'}
         </button>
         {error && <p className="mt-4 text-red-500">{error}</p>}
       </form>

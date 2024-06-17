@@ -67,7 +67,7 @@ const TodoList = () => {
         {todos.map((todo) => (
           <div
             key={todo.id}
-            className="bg-gray-800 text-white p-4 rounded shadow-lg"
+            className="bg-green-800 text-white p-4 rounded shadow-lg"
           >
             <h3 className="text-xl font-semibold">{todo.title}</h3>
             <p className="text-gray-400">{todo.description}</p>
